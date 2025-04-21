@@ -1,0 +1,23 @@
+{% load static %}
+<div class="card">
+    <div class="card-header">Crear Gasto</div>
+    <div class="card-body">
+        <h4 class="card-title">Datos del Gasto</h4>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% include 'gastos/form.html' %}
+    </div>
+    <div class="card-footer text-muted"></div>
+</div>
+
+{% include 'gastos/modal_confirm.html' %}
+
+<link rel="stylesheet" href="{% static 'css/modal.css' %}">
+<script src="{% static 'js/modal.js' %}"></script>

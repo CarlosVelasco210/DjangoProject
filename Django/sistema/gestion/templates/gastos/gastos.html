@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Hola, {{ user.nombre }} 👋</h1>
+        <p>Bienvenido a la sección de Gastos.</p>
+
+        <a href="{% url 'crear_gasto' %}" class="btn btn-primary">Crear Gasto</a>
+        <br><br>
+
+        <a href="{% url 'logout' %}" class="btn btn-secondary" style="color: red;">Cerrar Sesión</a>
+
+        <h2 class="mt-4">Lista de Gastos</h2>
+        
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Fecha Registro</th>
+                    <th>Fecha Límite</th>
+                    <th>Tipo Gasto</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for gasto in gastos %}
+                    <tr>
+                        <td>{{ gasto.id }}</td>
+                        <td>{{ gasto.descripcion }}</td>
+                        <td>{{ gasto.monto }}</td>
+                        <td>{{ gasto.fecha_registro }}</td>
+                        <td>{{ gasto.fecha_limite }}</td>
+                        <td>{{ gasto.tipo_gasto.nombre }}</td>
+                        <td>
+                            {% if gasto.estado in 'Cancelado,Rechazado' %}
+                                <span title="{{ gasto.motivo_cancelacion }}">{{ gasto.estado }}</span>
+                            {% else %}
+                                {{ gasto.estado }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if gasto.estado == 'Pendiente' %}
+                                <button class="btn btn-danger btn-cancelar" 
+                                    data-toggle="modal" 
+                                    data-target="#cancelarModal" 
+                                    data-id="{{ gasto.id }}" 
+                                    data-descripcion="{{ gasto.descripcion }}">
+                                    Cancelar
+                                </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">No se han registrado gastos aún.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include 'gastos/modal_cancelar.html' %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="{% static 'js/cancelar_gasto.js' %}"></script>
+
+    <script src="{% static 'js/mostrar_cancelar.js' %}"></script>
+    
+    <link rel="stylesheet" href="{% static 'css/mostrar_cancelar.css' %}">
+
+</body>
+</html>

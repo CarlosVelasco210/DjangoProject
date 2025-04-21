@@ -1,0 +1,14 @@
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    {% for campo in formulario %}
+        <div class="mb-3">
+            <label for="{{ campo.id_for_label }}" class="form-label">{{ campo.label }}</label>
+            {{ campo }}
+            <div class="text-danger">
+                {{ campo.errors }}
+            </div>
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-success">Enviar Información</button>
+    <a href="{% url 'gastos_dashboard' %}" class="btn btn-primary">Cancelar</a>
+</form>

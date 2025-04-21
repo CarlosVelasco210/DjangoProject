@@ -1,0 +1,44 @@
+<!-- templates/tablas.html -->
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Descripción del Gasto</th>
+                <th>Monto</th>
+                <th>Fecha de Registro</th>
+                <th>Fecha de Limite</th>
+                <th>Estado del Gasto</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos %}
+                <tr>
+                    <td>{{ pago.gasto.descripcion }}</td>
+                    <td>{{ pago.gasto.monto }}</td>
+                    <td>{{ pago.gasto.fecha_registro|date:"d/m/Y" }}</td>
+                    <td>{{ pago.gasto.fecha_limite|date:"d/m/Y" }}</td>
+                    <td>
+                        {% if pago.gasto.estado in 'Cancelado,Rechazado' %}
+                            <span title="{{ pago.gasto.motivo_cancelacion }}">{{ pago.gasto.estado }}</span>
+                        {% else %}
+                            {{ pago.gasto.estado }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if pago.gasto.estado == "Pendiente" %}
+                            <button class="btn btn-danger rechazar-pago-btn" data-pago-id="{{ pago.id }}">Rechazar</button>
+                            <button class="btn btn-success validar-pago-btn" data-pago-id="{{ pago.id }}">Validar</button>
+                        {% elif pago.gasto.estado == "Aprobado" %}
+                            <button class="btn btn-warning btn-cancelar-pago" data-id="{{ pago.id }}" data-descripcion="{{ pago.gasto.descripcion }}">Cancelar</button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No hay datos disponibles.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
